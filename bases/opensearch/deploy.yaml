@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opensearch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opensearch
+  template:
+    metadata:
+      labels:
+        app: opensearch
+    spec:
+      containers:
+        - name: opensearch
+          image: opensearchproject/opensearch:latest
+          ports:
+            - containerPort: 9200
+            - containerPort: 9600
+          env:
+            - name: OPENSEARCH_JAVA_OPTS
+              value: -Xms512m -Xmx512m
+            - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
+              value: FunkyPass123!
+            - name: cluster.name
+              value: opensearch-cluster
+            - name: node.name
+              value: opensearch
+            - name: discovery.seed_hosts
+              value: opensearch
+            - name: cluster.initial_cluster_manager_nodes
+              value: opensearch
+            - name: bootstrap.memory_lock
+              value: "false"
+          volumeMounts:
+            - name: opensearch-data
+              mountPath: /usr/share/opensearch/data
+      volumes:
+        - name: opensearch-data
+          emptyDir: {}

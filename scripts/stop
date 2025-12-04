@@ -1,0 +1,6 @@
+#!/bin/bash
+# Stop all processes running a 'kubectl port-forward'
+
+echo "Killing port-forwarding processes PIDs: $(pgrep -d ' ' -f kubectl.port-forward)"
+kill $(pgrep -d " " -f kubectl.port-forward)
+echo "Processes killed sucessfully."
